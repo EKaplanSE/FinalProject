@@ -1,4 +1,5 @@
 ﻿using Business.Concrete;
+using DataAccess.Concrete.EntityFramework;
 using DataAccess.Concrete.InMemory;
 using System;
 using System.Collections.Generic;
@@ -12,14 +13,25 @@ namespace ConsoleUI
     {
         static void Main(string[] args)
         {
-            ProductManager productManager = new ProductManager(new InMemoryProductDal());
+            //ProductManager productManager = new ProductManager(new InMemoryProductDal());
+            //GetAllByCategoryId(1);
+            CategoryManager categoryMabager = new CategoryManager(new EfCategoryDal());
+            foreach (var category in categoryMabager.GetAll())
+            {
+                Console.WriteLine(category.CategoryName);
+            }
 
-            foreach ( var product in productManager.GetAll())
+            Console.ReadLine();
+        }
+
+        private static void GetAllByCategoryId(int categoryId)
+        {
+            ProductManager productManager = new ProductManager(new EfProductDal());
+
+            foreach (var product in productManager.GetAllByCategoryId(categoryId))
             {
                 Console.WriteLine(product.ProductName);
             }
-            
-            Console.ReadLine();
         }
     }
 }
