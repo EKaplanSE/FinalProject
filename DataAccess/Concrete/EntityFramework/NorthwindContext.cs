@@ -15,7 +15,22 @@ namespace DataAccess.Concrete.EntityFramework
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-             optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb; Database=Northwind; Trusted_Connection=true");
+             optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb; Database=Northwind; Trusted_Connection=true;", options =>
+             {
+                 options.EnableRetryOnFailure();
+                 //options.EnableRetryOnFailure(
+                 //    maxRetryCount: 3,
+                 //    maxRetryDelay: TimeSpan.FromSeconds(10),
+                 //    errorNumbersToAdd: new List<int> { 4060 }); //additional error codes to treat as transient
+             });
+            //optionsBuilder.LogTo(
+            //    filter: (eventId, level) => eventId.Id == CoreEventId.ExecutionStrategyRetrying,
+            //    logger: (eventData) =>
+            //    {
+            //        var retryEventData = eventData as ExecutionStrategyEventData;
+            //        var exceptions = retryEventData.ExceptionsEncountered;
+            //        Console.WriteLine($"Retry #{exceptions.Count} with delay {retryEventData.Delay} due to error: {exceptions.Last().Message}");
+            //    });
         }
 
         //Hangi tablonun hangi classlarla eşleşeceği tanımlanır.
